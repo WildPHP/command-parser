@@ -8,13 +8,20 @@
 
 namespace WildPHP\Commands;
 
-class NumericParameter extends Parameter
+use ValidationClosures\Types;
+
+class NumericParameter extends Parameter implements ConvertibleParameterInterface
 {
     /**
      * NumericParameter constructor.
      */
     public function __construct()
     {
-        parent::__construct(\Closure::fromCallable('is_numeric'));
+        parent::__construct(Types::int());
+    }
+
+    public function convert(string $input)
+    {
+        return $input;
     }
 }

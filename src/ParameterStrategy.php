@@ -33,7 +33,7 @@ class ParameterStrategy extends Collection
      *
      * @param int $minimumParameters
      * @param int $maximumParameters
-     * @param array $initialValues
+     * @param ParameterInterface[] $initialValues
      * @param bool $implodeLeftover
      */
     public function __construct(
@@ -59,7 +59,7 @@ class ParameterStrategy extends Collection
      * @return bool
      * @throws \Exception
      */
-    public function validateParameter(string $parameterName, string $parameterValue)
+    public function validateParameter(string $parameterName, string $parameterValue): bool
     {
         if (!$this->offsetExists($parameterName)) {
             throw new \Exception('Cannot validate value for non-existing parameter ' . $parameterName);
@@ -74,11 +74,11 @@ class ParameterStrategy extends Collection
     /**
      * @param array $args
      *
-     * @return array
-     * @throws \Exception
+     * @return bool
      * @throws \InvalidArgumentException
+     * @throws \Exception
      */
-    public function validateArgumentArray(array $args): array
+    public function validateArgumentArray(array $args): bool
     {
         $names = array_keys((array)$this);
 
@@ -91,18 +91,16 @@ class ParameterStrategy extends Collection
             $args = self::implodeLeftoverArguments($args, $offset);
         }
 
-        $validatedParameters = [];
         $index = 0;
         foreach ($args as $value) {
-            if (!($return = $this->validateParameter($names[$index], $value))) {
+            if (!$this->validateParameter($names[$index], $value)) {
                 throw new \InvalidArgumentException('Parameter does not validate or index not in range');
             }
 
-            $validatedParameters[$names[$index]] = ($return === true) ? $value : $return;
             $index++;
         }
 
-        return $validatedParameters;
+        return true;
     }
 
     /**
@@ -120,6 +118,37 @@ class ParameterStrategy extends Collection
         $maximumParameters = $this->maximumParameters < 0 ? $count : $this->maximumParameters;
 
         return $count >= $this->minimumParameters && $count <= $maximumParameters;
+    }
+
+    /**
+     * @param string $parameterName
+     * @param string $parameterValue
+     * @return mixed
+     */
+    public function convertParameter(string $parameterName, string $parameterValue)
+    {
+        if (!$this->offsetExists($parameterName)) {
+            throw new \InvalidArgumentException('Parameter name does not exist');
+        }
+
+        if (!($this[$parameterName] instanceof ConvertibleParameterInterface)) {
+            return $parameterValue;
+        }
+
+        return $this[$parameterName]->convert($parameterValue);
+    }
+
+    /**
+     * @param array $parameters
+     * @return array
+     */
+    public function convertParameterArray(array $parameters): array
+    {
+        foreach ($parameters as $name => $value) {
+            $parameters[$name] = $this->convertParameter($name, $value);
+        }
+
+        return $parameters;
     }
 
     /**
