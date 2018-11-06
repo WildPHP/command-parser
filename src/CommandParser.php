@@ -29,12 +29,10 @@ class CommandParser
 
         /** @var ParameterStrategy $parameterStrategy */
         foreach ($parameterStrategies as $parameterStrategy) {
-            try {
-                $parameterStrategy->validateParameterArray($parameters);
+            $result = $parameterStrategy->validateParameterArray($parameters);
+
+            if ($result)
                 return $parameterStrategy;
-            } catch (\InvalidArgumentException $e) {
-                // Nothing is done here
-            }
         }
 
         throw new NoApplicableStrategiesException();
