@@ -7,7 +7,7 @@
  */
 
 use PHPUnit\Framework\TestCase;
-use WildPHP\Commands\NumericParameter;
+use WildPHP\Commands\Parameters\NumericParameter;
 
 class NumericParameterTest extends TestCase
 {

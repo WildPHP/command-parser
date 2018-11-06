@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright 2018 The WildPHP Team
  *
@@ -7,14 +6,15 @@
  * See the LICENSE file for more information.
  */
 
-namespace WildPHP\Commands;
+namespace WildPHP\Commands\Parameters;
 
 
-interface ConvertibleParameterInterface extends ParameterInterface
+interface ParameterInterface
 {
     /**
      * @param string $input
-     * @return mixed Output may be unpredictable.
+     *
+     * @return bool
      */
-    public function convert(string $input);
+    public function validate(string $input): bool;
 }

@@ -59,7 +59,7 @@ class ParameterStrategyTest extends TestCase
     public function testValidateParameter()
     {
         $parameterStrategy = new ParameterStrategy(1, 1, [
-            'test' => new \WildPHP\Commands\NumericParameter()
+            'test' => new \WildPHP\Commands\Parameters\NumericParameter()
         ]);
 
         $this->assertTrue($parameterStrategy->validateParameter('test', 1));
@@ -88,7 +88,7 @@ class ParameterStrategyTest extends TestCase
         );
 
         $parameterStrategy = new \WildPHP\Commands\ParameterStrategy(1, 1, [
-            'test' => new \WildPHP\Commands\StringParameter()
+            'test' => new \WildPHP\Commands\Parameters\StringParameter()
         ]);
 
         $this->assertEquals(
@@ -108,9 +108,9 @@ class ParameterStrategyTest extends TestCase
     public function testValidateParameterArray()
     {
         $parameterStrategy = new ParameterStrategy(3, 3, [
-            'test' => new \WildPHP\Commands\NumericParameter(),
-            'test2' => new \WildPHP\Commands\NumericParameter(),
-            'test3' => new \WildPHP\Commands\StringParameter()
+            'test' => new \WildPHP\Commands\Parameters\NumericParameter(),
+            'test2' => new \WildPHP\Commands\Parameters\NumericParameter(),
+            'test3' => new \WildPHP\Commands\Parameters\StringParameter()
         ]);
 
         $this->assertTrue($parameterStrategy->validateParameterArray([1, 2, 3]));

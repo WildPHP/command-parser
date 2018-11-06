@@ -8,8 +8,8 @@
 
 namespace WildPHP\Tests;
 
-use WildPHP\Commands\ConvertibleParameterInterface;
-use WildPHP\Commands\StringParameter;
+use WildPHP\Commands\Parameters\ConvertibleParameterInterface;
+use WildPHP\Commands\Parameters\StringParameter;
 
 class MockConvertibleParameter extends StringParameter implements ConvertibleParameterInterface
 {

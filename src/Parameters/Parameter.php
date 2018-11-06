@@ -6,8 +6,7 @@
  * See the LICENSE file for more information.
  */
 
-namespace WildPHP\Commands;
-
+namespace WildPHP\Commands\Parameters;
 
 class Parameter implements ParameterInterface
 {
@@ -29,7 +28,7 @@ class Parameter implements ParameterInterface
     /**
      * @inheritdoc
      */
-    public function validate(string $input)
+    public function validate(string $input): bool
     {
         return ($this->validationClosure)($input);
     }

@@ -6,7 +6,7 @@
  * See the LICENSE file for more information.
  */
 
-namespace WildPHP\Commands;
+namespace WildPHP\Commands\Parameters;
 
 use ValidationClosures\Types;
 

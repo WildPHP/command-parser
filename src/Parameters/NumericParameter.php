@@ -6,7 +6,7 @@
  * See the LICENSE file for more information.
  */
 
-namespace WildPHP\Commands;
+namespace WildPHP\Commands\Parameters;
 
 class NumericParameter extends Parameter implements ConvertibleParameterInterface
 {

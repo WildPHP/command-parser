@@ -11,6 +11,8 @@ namespace WildPHP\Commands;
 use ValidationClosures\Types;
 use WildPHP\Commands\Exceptions\InvalidParameterCountException;
 use WildPHP\Commands\Exceptions\ValidationException;
+use WildPHP\Commands\Parameters\ConvertibleParameterInterface;
+use WildPHP\Commands\Parameters\ParameterInterface;
 use Yoshi2889\Collections\Collection;
 
 class ParameterStrategy extends Collection
