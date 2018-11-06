@@ -93,7 +93,7 @@ class CommandProcessor
      * @return Command
      * @throws CommandNotFoundException
      */
-    protected function findCommand(string $command): Command
+    public function findCommand(string $command): Command
     {
         $dictionary = $this->getCommandCollection();
 
