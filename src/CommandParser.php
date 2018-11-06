@@ -39,14 +39,14 @@ class CommandParser
     }
 
     /**
-     * @param string $message
+     * @param string $string
      * @param string $prefix
      * @return ParsedCommand
      * @throws ParseException
      */
-    public static function parseFromString(string $message, string $prefix = '!'): ParsedCommand
+    public static function parseFromString(string $string, string $prefix = '!'): ParsedCommand
     {
-        $messageParts = explode(' ', trim($message));
+        $messageParts = explode(' ', trim($string));
         $firstPart = array_shift($messageParts);
 
         if (strlen($firstPart) == strlen($prefix)) {
