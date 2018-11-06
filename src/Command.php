@@ -19,16 +19,6 @@ class Command
     protected $callback;
 
     /**
-     * @var CommandHelp|null
-     */
-    protected $help = null;
-
-    /**
-     * @var string
-     */
-    protected $requiredPermission = '';
-
-    /**
      * @var ParameterStrategy[]
      */
     protected $parameterStrategies;
@@ -38,23 +28,17 @@ class Command
      *
      * @param callable $callback
      * @param array|ParameterStrategy $parameterStrategies
-     * @param null|CommandHelp $commandHelp
-     * @param string $requiredPermission
      */
     public function __construct(
         callable $callback,
-        $parameterStrategies,
-        ?CommandHelp $commandHelp = null,
-        string $requiredPermission = ''
+        $parameterStrategies
     ) {
         if (!is_array($parameterStrategies)) {
             $parameterStrategies = [$parameterStrategies];
         }
 
-        $this->parameterStrategies = $parameterStrategies;
-        $this->callback = $callback;
-        $this->help = $commandHelp;
-        $this->requiredPermission = $requiredPermission;
+        $this->setParameterStrategies($parameterStrategies);
+        $this->setCallback($callback);
     }
 
     /**
@@ -91,37 +75,5 @@ class Command
         }
 
         $this->parameterStrategies = $parameterStrategies;
-    }
-
-    /**
-     * @return CommandHelp|null
-     */
-    public function getHelp(): ?CommandHelp
-    {
-        return $this->help;
-    }
-
-    /**
-     * @param null|CommandHelp $help
-     */
-    public function setHelp(?CommandHelp $help)
-    {
-        $this->help = $help;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRequiredPermission(): string
-    {
-        return $this->requiredPermission;
-    }
-
-    /**
-     * @param string $requiredPermission
-     */
-    public function setRequiredPermission(string $requiredPermission)
-    {
-        $this->requiredPermission = $requiredPermission;
     }
 }
