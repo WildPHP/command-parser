@@ -20,6 +20,6 @@ class NumericParameter extends Parameter implements ConvertibleParameterInterfac
 
     public function convert(string $input)
     {
-        return (int) $input;
+        return (int)$input;
     }
 }
