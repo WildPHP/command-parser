@@ -9,6 +9,8 @@
 namespace WildPHP\Commands;
 
 use ValidationClosures\Types;
+use WildPHP\Commands\Exceptions\InvalidParameterCountException;
+use WildPHP\Commands\Exceptions\ValidationException;
 use Yoshi2889\Collections\Collection;
 
 class ParameterStrategy extends Collection
@@ -57,12 +59,12 @@ class ParameterStrategy extends Collection
      * @param string $parameterValue
      *
      * @return bool
-     * @throws \Exception
+     * @throws ValidationException
      */
     public function validateParameter(string $parameterName, string $parameterValue): bool
     {
         if (!$this->offsetExists($parameterName)) {
-            throw new \Exception('Cannot validate value for non-existing parameter ' . $parameterName);
+            throw new ValidationException('Cannot validate value for non-existing parameter ' . $parameterName);
         }
 
         /** @var ParameterInterface $parameter */
@@ -76,14 +78,15 @@ class ParameterStrategy extends Collection
      *
      * @return bool
      * @throws \InvalidArgumentException
-     * @throws \Exception
+     * @throws InvalidParameterCountException
+     * @throws ValidationException
      */
     public function validateArgumentArray(array $args): bool
     {
         $names = array_keys((array)$this);
 
         if (!$this->validateArgumentCount($args)) {
-            throw new \InvalidArgumentException('Parameter count does not validate');
+            throw new InvalidParameterCountException();
         }
 
         if ($this->implodeLeftover()) {

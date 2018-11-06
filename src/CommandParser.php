@@ -9,16 +9,21 @@
 
 namespace WildPHP\Commands;
 
+use WildPHP\Commands\Exceptions\NoApplicableStrategiesException;
+use WildPHP\Commands\Exceptions\ParseException;
+
 class CommandParser
 {
     /**
      * @param Command $commandObject
      * @param array $parameters
      *
-     * @return null|ParameterStrategy
-     * @throws \Exception
+     * @return ParameterStrategy
+     * @throws Exceptions\InvalidParameterCountException
+     * @throws Exceptions\ValidationException
+     * @throws NoApplicableStrategiesException
      */
-    public static function findApplicableStrategy(Command $commandObject, array $parameters): ?ParameterStrategy
+    public static function findApplicableStrategy(Command $commandObject, array $parameters): ParameterStrategy
     {
         $parameterStrategies = $commandObject->getParameterStrategies();
 
@@ -32,25 +37,26 @@ class CommandParser
             }
         }
 
-        return null;
+        throw new NoApplicableStrategiesException();
     }
 
     /**
      * @param string $message
      * @param string $prefix
      * @return ParsedCommand
+     * @throws ParseException
      */
-    public static function parseFromString(string $message, string $prefix = '!'): ?ParsedCommand
+    public static function parseFromString(string $message, string $prefix = '!'): ParsedCommand
     {
         $messageParts = explode(' ', trim($message));
         $firstPart = array_shift($messageParts);
 
         if (strlen($firstPart) == strlen($prefix)) {
-            return null;
+            throw new ParseException();
         }
 
         if (substr($firstPart, 0, strlen($prefix)) != $prefix) {
-            return null;
+            throw new ParseException();
         }
 
         $command = substr($firstPart, strlen($prefix));
