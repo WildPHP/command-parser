@@ -81,23 +81,23 @@ class ParameterStrategy extends Collection
      * @throws InvalidParameterCountException
      * @throws ValidationException
      */
-    public function validateArgumentArray(array $args): bool
+    public function validateParameterArray(array $args): bool
     {
         $names = array_keys((array)$this);
 
-        if (!$this->validateArgumentCount($args)) {
+        if (!$this->validateParameterCount($args)) {
             throw new InvalidParameterCountException();
         }
 
         if ($this->implodeLeftover()) {
             $offset = count($names) - 1;
-            $args = self::implodeLeftoverArguments($args, $offset);
+            $args = self::implodeLeftoverParameters($args, $offset);
         }
 
         $index = 0;
         foreach ($args as $value) {
             if (!$this->validateParameter($names[$index], $value)) {
-                throw new \InvalidArgumentException('Parameter does not validate or index not in range');
+                return false;
             }
 
             $index++;
@@ -111,9 +111,9 @@ class ParameterStrategy extends Collection
      *
      * @return bool
      */
-    public function validateArgumentCount(array $args): bool
+    public function validateParameterCount(array $args): bool
     {
-        if ($this->minimumParameters < 0) {
+        if ($this->minimumParameters < 0 || $this->implodeLeftover()) {
             return true;
         }
 
@@ -163,12 +163,20 @@ class ParameterStrategy extends Collection
     }
 
     /**
+     * @param bool $implodeLeftover
+     */
+    public function setImplodeLeftover(bool $implodeLeftover): void
+    {
+        $this->implodeLeftover = $implodeLeftover;
+    }
+
+    /**
      * @param string[] $arguments
      * @param int $offset
      *
      * @return string[]
      */
-    public static function implodeLeftoverArguments(array $arguments, int $offset): array
+    public static function implodeLeftoverParameters(array $arguments, int $offset): array
     {
         $array1 = array_slice($arguments, 0, $offset);
         $array2 = [implode(' ', array_slice($arguments, $offset))];

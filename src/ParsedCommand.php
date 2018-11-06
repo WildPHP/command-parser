@@ -29,8 +29,8 @@ class ParsedCommand
      */
     public function __construct(string $command, array $arguments)
     {
-        $this->command = $command;
-        $this->arguments = $arguments;
+        $this->setCommand($command);
+        $this->setArguments($arguments);
     }
 
     /**

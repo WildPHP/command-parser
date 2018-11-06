@@ -30,7 +30,7 @@ class CommandParser
         /** @var ParameterStrategy $parameterStrategy */
         foreach ($parameterStrategies as $parameterStrategy) {
             try {
-                $parameterStrategy->validateArgumentArray($parameters);
+                $parameterStrategy->validateParameterArray($parameters);
                 return $parameterStrategy;
             } catch (\InvalidArgumentException $e) {
                 // Nothing is done here

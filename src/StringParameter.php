@@ -8,6 +8,8 @@
 
 namespace WildPHP\Commands;
 
+use ValidationClosures\Types;
+
 class StringParameter extends Parameter
 {
     /**
@@ -16,8 +18,6 @@ class StringParameter extends Parameter
     public function __construct()
     {
         // Parameter values are string by design. Don't bother validating them.
-        parent::__construct(function () {
-            return true;
-        });
+        parent::__construct(Types::string());
     }
 }

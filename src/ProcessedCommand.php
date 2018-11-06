@@ -20,19 +20,19 @@ class ProcessedCommand extends ParsedCommand
     /**
      * @var array
      */
-    protected $convertedArguments = [];
+    protected $convertedParameters = [];
 
     /**
      * ProcessedCommand constructor.
      * @param string $command
      * @param array $arguments
      * @param ParameterStrategy $applicableStrategy
-     * @param array $convertedArguments
+     * @param array $convertedParameters
      */
-    public function __construct(string $command, array $arguments, ParameterStrategy $applicableStrategy, array $convertedArguments)
+    public function __construct(string $command, array $arguments, ParameterStrategy $applicableStrategy, array $convertedParameters)
     {
         parent::__construct($command, $arguments);
-        $this->convertedArguments = $convertedArguments;
+        $this->convertedParameters = $convertedParameters;
         $this->applicableStrategy = $applicableStrategy;
     }
 
@@ -47,8 +47,8 @@ class ProcessedCommand extends ParsedCommand
     /**
      * @return array
      */
-    public function getConvertedArguments(): array
+    public function getConvertedParameters(): array
     {
-        return $this->convertedArguments;
+        return $this->convertedParameters;
     }
 }
