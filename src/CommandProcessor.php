@@ -10,7 +10,6 @@
 namespace WildPHP\Commands;
 
 use ValidationClosures\Types;
-use ValidationClosures\Utils;
 use WildPHP\Commands\Exceptions\CommandNotFoundException;
 use Yoshi2889\Collections\Collection;
 
@@ -20,11 +19,6 @@ class CommandProcessor
      * @var Collection
      */
     protected $commandCollection = null;
-
-    /**
-     * @var array
-     */
-    protected $aliases = [];
 
     /**
      * CommandProcessor constructor.
@@ -49,41 +43,17 @@ class CommandProcessor
     /**
      * @param string $command
      * @param Command $commandObject
-     * @param string[] $aliases
      *
      * @return bool
      */
-    public function registerCommand(string $command, Command $commandObject, array $aliases = [])
+    public function registerCommand(string $command, Command $commandObject): bool
     {
-        if ($this->getCommandCollection()->offsetExists($command) || !Utils::validateArray(Types::string(), $aliases)) {
+        if ($this->getCommandCollection()->offsetExists($command)) {
             return false;
         }
 
         $this->getCommandCollection()->offsetSet($command, $commandObject);
 
-        foreach ($aliases as $alias) {
-            $this->alias($command, $alias);
-        }
-
-        return true;
-    }
-
-    /**
-     * @param string $originalCommand
-     * @param string $alias
-     *
-     * @return bool
-     */
-    public function alias(string $originalCommand, string $alias): bool
-    {
-        if (!$this->getCommandCollection()->offsetExists($originalCommand) || array_key_exists($alias,
-                $this->aliases)) {
-            return false;
-        }
-
-        /** @var Command $commandObject */
-        $commandObject = $this->getCommandCollection()[$originalCommand];
-        $this->aliases[$alias] = $commandObject;
         return true;
     }
 
@@ -97,12 +67,12 @@ class CommandProcessor
     {
         $dictionary = $this->getCommandCollection();
 
-        if (!$dictionary->offsetExists($command) && !array_key_exists($command, $this->aliases)) {
+        if (!$dictionary->offsetExists($command)) {
             throw new CommandNotFoundException();
         }
 
         /** @var Command $commandObject */
-        return $dictionary[$command] ?? $this->aliases[$command];
+        return $dictionary[$command];
     }
 
     /**
