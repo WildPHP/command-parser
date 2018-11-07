@@ -10,7 +10,6 @@
 namespace WildPHP\Commands;
 
 use ValidationClosures\Types;
-use WildPHP\Commands\Exceptions\CommandNotFoundException;
 use Yoshi2889\Collections\Collection;
 
 class CommandProcessor
@@ -32,7 +31,10 @@ class CommandProcessor
     /**
      * @param ParsedCommand $parsedCommand
      * @return ProcessedCommand
-     * @throws \Exception
+     * @throws Exceptions\CommandNotFoundException
+     * @throws Exceptions\InvalidParameterCountException
+     * @throws Exceptions\NoApplicableStrategiesException
+     * @throws Exceptions\ValidationException
      */
     public function process(ParsedCommand $parsedCommand): ProcessedCommand
     {
@@ -61,14 +63,14 @@ class CommandProcessor
      * @param string $command
      *
      * @return Command
-     * @throws CommandNotFoundException
+     * @throws Exceptions\CommandNotFoundException
      */
     public function findCommand(string $command): Command
     {
         $dictionary = $this->getCommandCollection();
 
         if (!$dictionary->offsetExists($command)) {
-            throw new CommandNotFoundException();
+            throw new Exceptions\CommandNotFoundException();
         }
 
         /** @var Command $commandObject */
@@ -79,7 +81,9 @@ class CommandProcessor
      * @param ParsedCommand $parsedCommand
      * @param Command $command
      * @return ProcessedCommand
-     * @throws \Exception
+     * @throws Exceptions\InvalidParameterCountException
+     * @throws Exceptions\NoApplicableStrategiesException
+     * @throws Exceptions\ValidationException
      */
     public static function processParsedCommand(ParsedCommand $parsedCommand, Command $command): ProcessedCommand
     {
