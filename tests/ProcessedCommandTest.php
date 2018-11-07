@@ -11,11 +11,15 @@ use WildPHP\Commands\ProcessedCommand;
 
 class ProcessedCommandTest extends TestCase
 {
+    // mock
+    public function foo()
+    {
 
+    }
     public function testGetApplicableStrategy()
     {
         $parameterStrategy = new \WildPHP\Commands\ParameterStrategy();
-        $processedCommand = new ProcessedCommand('test', ['test'], $parameterStrategy, ['ing']);
+        $processedCommand = new ProcessedCommand('test', ['test'], $parameterStrategy, ['ing'], [$this, 'foo']);
 
         $this->assertSame($parameterStrategy, $processedCommand->getApplicableStrategy());
         $this->assertSame(['ing'], $processedCommand->getConvertedParameters());

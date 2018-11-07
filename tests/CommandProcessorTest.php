@@ -49,7 +49,8 @@ class CommandProcessorTest extends TestCase
             'test',
             ['1'],
             $parameterStrategy,
-            [1]
+            [1],
+            $command->getCallback()
         );
 
         $commandProcessor = new CommandProcessor();
