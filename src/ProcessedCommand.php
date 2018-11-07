@@ -23,17 +23,24 @@ class ProcessedCommand extends ParsedCommand
     protected $convertedParameters = [];
 
     /**
+     * @var callable
+     */
+    protected $callback;
+
+    /**
      * ProcessedCommand constructor.
      * @param string $command
      * @param array $arguments
      * @param ParameterStrategy $applicableStrategy
      * @param array $convertedParameters
+     * @param callable $callback
      */
-    public function __construct(string $command, array $arguments, ParameterStrategy $applicableStrategy, array $convertedParameters)
+    public function __construct(string $command, array $arguments, ParameterStrategy $applicableStrategy, array $convertedParameters, callable $callback)
     {
         parent::__construct($command, $arguments);
         $this->convertedParameters = $convertedParameters;
         $this->applicableStrategy = $applicableStrategy;
+        $this->callback = $callback;
     }
 
     /**
@@ -50,5 +57,13 @@ class ProcessedCommand extends ParsedCommand
     public function getConvertedParameters(): array
     {
         return $this->convertedParameters;
+    }
+
+    /**
+     * @return callable
+     */
+    public function getCallback(): callable
+    {
+        return $this->callback;
     }
 }

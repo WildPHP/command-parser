@@ -96,7 +96,7 @@ The heart of this class is this static function.
 `public static function processParsedCommand(ParsedCommand $parsedCommand, Command $command): ProcessedCommand`
 
 It takes a `ParsedCommand` object and accompanying `Command` object and processes it into a `ProcessedCommand` object,
-which contains the original `ParsedCommand` data plus the converted parameter values and also the applied strategy used for conversion. 
+which contains the original `ParsedCommand` data plus the callback, the converted parameter values and also the applied strategy used for conversion. 
 
 ### process
 `process(ParsedCommand $parsedCommand): ProcessedCommand`

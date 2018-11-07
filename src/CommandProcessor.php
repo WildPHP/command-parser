@@ -94,7 +94,8 @@ class CommandProcessor
             $parsedCommand->getCommand(),
             $parameters,
             $applicableStrategy,
-            $applicableStrategy->convertParameterArray($parameters)
+            $applicableStrategy->convertParameterArray($parameters),
+            $command->getCallback()
         );
     }
 
