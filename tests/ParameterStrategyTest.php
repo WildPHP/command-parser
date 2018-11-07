@@ -117,7 +117,7 @@ class ParameterStrategyTest extends TestCase
         $this->assertTrue($parameterStrategy->validateParameterArray([1, 2, 'test']));
         $this->assertFalse($parameterStrategy->validateParameterArray(['test', 2, 3]));
 
-        $parameterStrategy->setImplodeLeftover(true);
+        $parameterStrategy->setConcatLeftover(true);
 
         // implode on [3, 4] == '3 4'
         $this->assertTrue($parameterStrategy->validateParameterArray([1, 2, 3, 4]));

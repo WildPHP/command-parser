@@ -30,7 +30,7 @@ class ParameterStrategy extends Collection
     /**
      * @var bool
      */
-    protected $implodeLeftover;
+    protected $concatLeftover;
 
     /**
      * ParameterDefinitions constructor.
@@ -38,13 +38,13 @@ class ParameterStrategy extends Collection
      * @param int $minimumParameters
      * @param int $maximumParameters
      * @param ParameterInterface[] $initialValues
-     * @param bool $implodeLeftover
+     * @param bool $concatLeftover
      */
     public function __construct(
         int $minimumParameters = -1,
         int $maximumParameters = -1,
         array $initialValues = [],
-        bool $implodeLeftover = false
+        bool $concatLeftover = false
     ) {
         if ($maximumParameters >= 0 && $minimumParameters > $maximumParameters) {
             throw new \InvalidArgumentException('Invalid parameter range (minimum cannot be larger than maximum)');
@@ -53,7 +53,7 @@ class ParameterStrategy extends Collection
         parent::__construct(Types::instanceof(ParameterInterface::class), $initialValues);
         $this->minimumParameters = $minimumParameters;
         $this->maximumParameters = $maximumParameters;
-        $this->implodeLeftover = $implodeLeftover;
+        $this->concatLeftover = $concatLeftover;
     }
 
     /**
@@ -91,7 +91,7 @@ class ParameterStrategy extends Collection
             throw new InvalidParameterCountException();
         }
 
-        if ($this->implodeLeftover()) {
+        if ($this->shouldConcatLeftover()) {
             $offset = count($names) - 1;
             $args = self::implodeLeftoverParameters($args, $offset);
         }
@@ -115,7 +115,7 @@ class ParameterStrategy extends Collection
      */
     public function validateParameterCount(array $args): bool
     {
-        if ($this->minimumParameters < 0 || $this->implodeLeftover()) {
+        if ($this->minimumParameters < 0 || $this->shouldConcatLeftover()) {
             return true;
         }
 
@@ -159,17 +159,17 @@ class ParameterStrategy extends Collection
     /**
      * @return bool
      */
-    public function implodeLeftover(): bool
+    public function shouldConcatLeftover(): bool
     {
-        return $this->implodeLeftover;
+        return $this->concatLeftover;
     }
 
     /**
-     * @param bool $implodeLeftover
+     * @param bool $concatLeftover
      */
-    public function setImplodeLeftover(bool $implodeLeftover): void
+    public function setConcatLeftover(bool $concatLeftover): void
     {
-        $this->implodeLeftover = $implodeLeftover;
+        $this->concatLeftover = $concatLeftover;
     }
 
     /**
