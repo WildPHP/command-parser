@@ -29,10 +29,7 @@ class Command
      * @param callable $callback
      * @param array|ParameterStrategy $parameterStrategies
      */
-    public function __construct(
-        callable $callback,
-        $parameterStrategies
-    ) {
+    public function __construct(callable $callback, $parameterStrategies) {
         if (!is_array($parameterStrategies)) {
             $parameterStrategies = [$parameterStrategies];
         }
