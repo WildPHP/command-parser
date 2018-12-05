@@ -66,6 +66,22 @@ class ParameterStrategyTest extends TestCase
         $this->assertFalse($parameterStrategy->validateParameter('test', 'ing'));
     }
 
+    public function testRemapNumericParameterIndexes()
+    {
+        $parameterStrategy = new ParameterStrategy(1, 1, [
+            'test' => new \WildPHP\Commands\Parameters\NumericParameter(),
+            'ing' => new \WildPHP\Commands\Parameters\NumericParameter()
+        ]);
+
+        $parameters = [1, 2];
+        $expected = ['test' => 1, 'ing' => 2];
+        $this->assertEquals($expected, $parameterStrategy->remapNumericParameterIndexes($parameters));
+
+        $parameters = [1, 'foo' => 2];
+        $expected = ['test' => 1, 'foo' => 2];
+        $this->assertEquals($expected, $parameterStrategy->remapNumericParameterIndexes($parameters));
+    }
+
     public function testConvertParameter()
     {
         $parameterStrategy = new \WildPHP\Commands\ParameterStrategy(1, 4, [

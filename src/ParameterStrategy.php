@@ -157,6 +157,30 @@ class ParameterStrategy extends Collection
     }
 
     /**
+     * @param array $parameters
+     * @return array
+     */
+    public function remapNumericParameterIndexes(array $parameters): array
+    {
+        $index = 0;
+        $remapTo = $this->keys();
+        $remappedParameters = [];
+
+        foreach ($parameters as $key => $value) {
+            $newIndex = $key;
+
+            if (is_numeric($key)) {
+                $newIndex = $remapTo[$index];
+            }
+
+            $remappedParameters[$newIndex] = $value;
+            $index++;
+        }
+
+        return $remappedParameters;
+    }
+
+    /**
      * @return bool
      */
     public function shouldConcatLeftover(): bool
