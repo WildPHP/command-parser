@@ -50,7 +50,7 @@ __construct(
 )
 ```
 
-- `$minimumParameters` and `$maximumParameters describe how many parameters this particular strategy may take.
+- `$minimumParameters` and `$maximumParameters` describe how many parameters this particular strategy may take.
 They can be set to -1 or false to disable either bound. However, minimum cannot be larger than maximum.
 - `$initialValues` is an array of `ParameterInterface` objects. More on those below.
 - `$concatLeftover` is a boolean. When set to true, the strategy will concatenate all remaining parameters together into one
