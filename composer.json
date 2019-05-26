@@ -3,12 +3,6 @@
   "description": "Command parser subsystem used in WildPHP",
   "type": "library",
   "license": "MIT",
-  "authors": [
-    {
-      "name": "Rick Kerkhof",
-      "email": "rick.2889@gmail.com"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "WildPHP\\Commands\\": "src/",
