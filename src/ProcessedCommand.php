@@ -9,13 +9,12 @@
 
 namespace WildPHP\Commands;
 
-
 class ProcessedCommand extends ParsedCommand
 {
     /**
      * @var ParameterStrategy
      */
-    protected $applicableStrategy = null;
+    protected $applicableStrategy;
 
     /**
      * @var array
@@ -35,8 +34,13 @@ class ProcessedCommand extends ParsedCommand
      * @param array $convertedParameters
      * @param callable $callback
      */
-    public function __construct(string $command, array $arguments, ParameterStrategy $applicableStrategy, array $convertedParameters, callable $callback)
-    {
+    public function __construct(
+        string $command,
+        array $arguments,
+        ParameterStrategy $applicableStrategy,
+        array $convertedParameters,
+        callable $callback
+    ) {
         parent::__construct($command, $arguments);
         $this->convertedParameters = $convertedParameters;
         $this->applicableStrategy = $applicableStrategy;

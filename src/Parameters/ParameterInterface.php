@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2018 The WildPHP Team
  *
@@ -7,7 +8,6 @@
  */
 
 namespace WildPHP\Commands\Parameters;
-
 
 interface ParameterInterface
 {

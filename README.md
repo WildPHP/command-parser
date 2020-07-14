@@ -26,52 +26,58 @@ This is the class which defines your commands. It is a storage class, meaning it
 hand to it.
 
 #### Creating a Command
-A `Command` takes two parameters for its constructor. A callback which should be called when the command is triggered, and
+A `Command` takes two parameters for its constructor. A callback which should be called when the command triggers, and
 one or more `ParameterStrategy` instances which will define the behavior of the command. For example:
 
 ```php
-$foo = function () {};
+use WildPHP\Commands\Command;
+use WildPHP\Commands\ParameterStrategy;
+use WildPHP\Commands\Parameters\NumericParameter;
+
+$foo = static function () {};
 $command = new Command($foo, new ParameterStrategy(0, 1, [
     new NumericParameter(),
-]);  
+]));  
 ``` 
 
 ### ParameterStrategy
-A `ParameterStrategy` instance describes the ways in which commands may be executed.
+A `ParameterStrategy` instance defines a single way in which parameters can be passed to commands.
 
 Its constructor takes a few arguments:
 
 ```php
-__construct(
-        int $minimumParameters = -1,
-        int $maximumParameters = -1,
-        array $initialValues = [],
-        bool $implodeLeftover = false
-)
+class ParameterStrategy {
+    public function __construct(
+            int $minimumParameters = -1,
+            int $maximumParameters = -1,
+            array $initialValues = [],
+            bool $implodeLeftover = false
+    )
+    {}
+}
 ```
 
 - `$minimumParameters` and `$maximumParameters` describe how many parameters this particular strategy may take.
 They can be set to -1 or false to disable either bound. However, minimum cannot be larger than maximum.
 - `$initialValues` is an array of `ParameterInterface` objects. More on those below.
-- `$concatLeftover` is a boolean. When set to true, the strategy will concatenate all remaining parameters together into one
-  when the maximum parameter count is reached. For example, consider a strategy which will only take up to 2 parameters.
+- `$concatLeftover` is a boolean value. When set to true, the strategy will concatenate all remaining parameters together into one
+  after the maximum parameter count has been reached. For example, consider a strategy which will only take up to 2 parameters.
   If you pass it a command with 3 parameters with this flag set, for example '!test 1 2 3', 2 and 3 will be concatenated
-  as `array('1', '2 3')`
+  as `array('1', '2 3')`.
   
 ### Available parameters
 #### NumericParameter
 Takes any value which is numeric, it uses the php `is_numeric` function internally.
 
 #### PredefinedStringParameter
-Set a predefined string in its constructor and only that string will be accepted as its value, thus
-any other value will be rejected.
+Set a predefined string in its constructor. This parameter will only validate when this exact string matches.
 
 #### StringParameter
-Returns true under any circumstance, since parameters are always strings.
+Returns true under any circumstance, since parameters are always strings. Can be used as a catch-all parameter.
 
 ### CommandParser
-As the name would suggest, this is the class in charge of actually parsing messages. When it does so, it hands out `ParsedCommand`
-objects. As it is a utility class, its methods are called statically.
+This is the class in charge of actually parsing strings. When it does so, it returns `ParsedCommand`
+objects. As it is a utility class, its methods should be called statically.
 
 #### findApplicableStrategy
 `findApplicableStrategy(Command $commandObject, array $parameters): ParameterStrategy`
@@ -87,8 +93,8 @@ Set `$prefix` for the prefix to use, which should prefix any command given.
 `ParsedCommand` is an object containing the command name and the original parameters given.
 
 ### CommandProcessor
-This class processes a ParsedCommand further and provides the value conversion facilities.
-Moreover, when instantiated, it acts as a storage facility for commands so they need not be stored elsewhere.
+This class processes a ParsedCommand and provides the value conversion facilities.
+Moreover, when instantiated, it acts as a storage facility for command objects.
 
 #### processParsedCommand
 The heart of this class is this static function.
@@ -96,7 +102,7 @@ The heart of this class is this static function.
 `public static function processParsedCommand(ParsedCommand $parsedCommand, Command $command): ProcessedCommand`
 
 It takes a `ParsedCommand` object and accompanying `Command` object and processes it into a `ProcessedCommand` object,
-which contains the original `ParsedCommand` data plus the callback, the converted parameter values and also the applied strategy used for conversion. 
+which contains the original `ParsedCommand` data plus the callback, the converted parameter values, and the applied strategy used for conversion. 
 
 ### process
 `process(ParsedCommand $parsedCommand): ProcessedCommand`

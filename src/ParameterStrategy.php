@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2018 The WildPHP Team
  *
@@ -8,6 +9,7 @@
 
 namespace WildPHP\Commands;
 
+use InvalidArgumentException;
 use ValidationClosures\Types;
 use WildPHP\Commands\Exceptions\InvalidParameterCountException;
 use WildPHP\Commands\Exceptions\ValidationException;
@@ -47,7 +49,7 @@ class ParameterStrategy extends Collection
         bool $concatLeftover = false
     ) {
         if ($maximumParameters >= 0 && $minimumParameters > $maximumParameters) {
-            throw new \InvalidArgumentException('Invalid parameter range (minimum cannot be larger than maximum)');
+            throw new InvalidArgumentException('Invalid parameter range (minimum cannot be larger than maximum)');
         }
 
         parent::__construct(Types::instanceof(ParameterInterface::class), $initialValues);
@@ -88,7 +90,7 @@ class ParameterStrategy extends Collection
         $names = array_keys((array)$this);
 
         if (!$this->validateParameterCount($args)) {
-            throw new InvalidParameterCountException();
+            throw new InvalidParameterCountException('The command has an unsatisfactory amount of parameters');
         }
 
         if ($this->shouldConcatLeftover()) {
@@ -133,7 +135,7 @@ class ParameterStrategy extends Collection
     public function convertParameter(string $parameterName, string $parameterValue)
     {
         if (!$this->offsetExists($parameterName)) {
-            throw new \InvalidArgumentException('Parameter name does not exist');
+            throw new InvalidArgumentException('Parameter name does not exist');
         }
 
         if (!($this[$parameterName] instanceof ConvertibleParameterInterface)) {

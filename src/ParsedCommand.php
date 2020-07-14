@@ -9,7 +9,6 @@
 
 namespace WildPHP\Commands;
 
-
 class ParsedCommand
 {
     /**
@@ -64,7 +63,4 @@ class ParsedCommand
     {
         $this->arguments = $arguments;
     }
-
-
-
 }

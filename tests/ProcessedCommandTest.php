@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2018 The WildPHP Team
  *
@@ -6,7 +7,10 @@
  * See the LICENSE file for more information.
  */
 
+namespace WildPHP\Tests;
+
 use PHPUnit\Framework\TestCase;
+use WildPHP\Commands\ParameterStrategy;
 use WildPHP\Commands\ProcessedCommand;
 
 class ProcessedCommandTest extends TestCase
@@ -14,14 +18,14 @@ class ProcessedCommandTest extends TestCase
     // mock
     public function foo()
     {
-
     }
     public function testGetApplicableStrategy()
     {
-        $parameterStrategy = new \WildPHP\Commands\ParameterStrategy();
+        $parameterStrategy = new ParameterStrategy();
         $processedCommand = new ProcessedCommand('test', ['test'], $parameterStrategy, ['ing'], [$this, 'foo']);
 
-        $this->assertSame($parameterStrategy, $processedCommand->getApplicableStrategy());
-        $this->assertSame(['ing'], $processedCommand->getConvertedParameters());
+        self::assertSame($parameterStrategy, $processedCommand->getApplicableStrategy());
+        self::assertSame(['ing'], $processedCommand->getConvertedParameters());
+        self::assertSame([$this, 'foo'], $processedCommand->getCallback());
     }
 }
