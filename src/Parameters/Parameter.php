@@ -28,7 +28,7 @@ class Parameter implements ParameterInterface
     /**
      * @inheritdoc
      */
-    public function validate(string $input): bool
+    public function validate(string $input)
     {
         return ($this->validationClosure)($input);
     }

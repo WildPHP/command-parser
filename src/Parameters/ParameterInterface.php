@@ -14,7 +14,7 @@ interface ParameterInterface
     /**
      * @param string $input
      *
-     * @return bool
+     * @return mixed
      */
-    public function validate(string $input): bool;
+    public function validate(string $input);
 }
