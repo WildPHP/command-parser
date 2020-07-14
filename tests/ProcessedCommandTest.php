@@ -26,5 +26,6 @@ class ProcessedCommandTest extends TestCase
 
         self::assertSame($parameterStrategy, $processedCommand->getApplicableStrategy());
         self::assertSame(['ing'], $processedCommand->getConvertedParameters());
+        self::assertSame([$this, 'foo'], $processedCommand->getCallback());
     }
 }
