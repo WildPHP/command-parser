@@ -90,7 +90,7 @@ class ParameterStrategy extends Collection
         $names = array_keys((array)$this);
 
         if (!$this->validateParameterCount($args)) {
-            throw new InvalidParameterCountException();
+            throw new InvalidParameterCountException('The command has an unsatisfactory amount of parameters');
         }
 
         if ($this->shouldConcatLeftover()) {

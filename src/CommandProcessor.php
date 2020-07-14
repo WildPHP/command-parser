@@ -71,7 +71,7 @@ class CommandProcessor
         $dictionary = $this->getCommandCollection();
 
         if (!$dictionary->offsetExists($command)) {
-            throw new Exceptions\CommandNotFoundException();
+            throw new CommandNotFoundException('The given command was not (yet) registered in the CommandProcessor');
         }
 
         /** @var Command $commandObject */

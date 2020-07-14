@@ -36,7 +36,7 @@ class CommandParser
             }
         }
 
-        throw new NoApplicableStrategiesException();
+        throw new NoApplicableStrategiesException('No applicable strategies were found');
     }
 
     /**
@@ -50,12 +50,12 @@ class CommandParser
         $messageParts = explode(' ', trim($string));
         $firstPart = array_shift($messageParts);
 
-        if (strlen($firstPart) == strlen($prefix)) {
-            throw new ParseException();
+        if (strlen($firstPart) === strlen($prefix)) {
+            throw new ParseException('This command consists of only a command prefix');
         }
 
-        if (substr($firstPart, 0, strlen($prefix)) != $prefix) {
-            throw new ParseException();
+        if (strpos($firstPart, $prefix) !== 0) {
+            throw new ParseException('The command prefix is not at the beginning of the given command');
         }
 
         $command = substr($firstPart, strlen($prefix));
