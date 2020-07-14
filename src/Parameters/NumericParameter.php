@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2018 The WildPHP Team
  *
@@ -8,6 +9,8 @@
 
 namespace WildPHP\Commands\Parameters;
 
+use Closure;
+
 class NumericParameter extends Parameter implements ConvertibleParameterInterface
 {
     /**
@@ -15,7 +18,7 @@ class NumericParameter extends Parameter implements ConvertibleParameterInterfac
      */
     public function __construct()
     {
-        parent::__construct(\Closure::fromCallable('is_numeric'));
+        parent::__construct(Closure::fromCallable('is_numeric'));
     }
 
     public function convert(string $input)

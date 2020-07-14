@@ -9,7 +9,6 @@
 
 namespace WildPHP\Commands\Parameters;
 
-
 interface ConvertibleParameterInterface extends ParameterInterface
 {
     /**

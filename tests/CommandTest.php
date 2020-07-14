@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2018 The WildPHP Team
  *
@@ -6,65 +7,68 @@
  * See the LICENSE file for more information.
  */
 
+namespace WildPHP\Tests;
+
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use WildPHP\Commands\Command;
+use WildPHP\Commands\Parameters\NumericParameter;
+use WildPHP\Commands\ParameterStrategy;
 
 class CommandTest extends TestCase
 {
     // mock
     public function foo()
     {
-
     }
 
     public function bar()
     {
-
     }
 
     public function testSetCallback()
     {
-        $parameterStrategy = new \WildPHP\Commands\ParameterStrategy();
+        $parameterStrategy = new ParameterStrategy();
         $command = new Command([$this, 'foo'], $parameterStrategy);
 
         $command->setCallback([$this, 'bar']);
-        $this->assertEquals([$this, 'bar'], $command->getCallback());
+        self::assertEquals([$this, 'bar'], $command->getCallback());
     }
 
     public function testGetParameterStrategies()
     {
         $parameterStrategies = [
-            new \WildPHP\Commands\ParameterStrategy(),
-            new \WildPHP\Commands\ParameterStrategy(),
-            new \WildPHP\Commands\ParameterStrategy(),
-            new \WildPHP\Commands\ParameterStrategy()
+            new ParameterStrategy(),
+            new ParameterStrategy(),
+            new ParameterStrategy(),
+            new ParameterStrategy()
         ];
         $command = new Command([$this, 'foo'], $parameterStrategies);
 
-        $this->assertSame($parameterStrategies, $command->getParameterStrategies());
+        self::assertSame($parameterStrategies, $command->getParameterStrategies());
     }
 
     public function testGetCallback()
     {
-        $parameterStrategy = new \WildPHP\Commands\ParameterStrategy();
+        $parameterStrategy = new ParameterStrategy();
         $command = new Command([$this, 'foo'], $parameterStrategy);
-        $this->assertEquals([$this, 'foo'], $command->getCallback());
+        self::assertEquals([$this, 'foo'], $command->getCallback());
     }
 
     public function testSetParameterStrategies()
     {
         $parameterStrategies = [
-            new \WildPHP\Commands\ParameterStrategy(),
-            new \WildPHP\Commands\ParameterStrategy(),
-            new \WildPHP\Commands\ParameterStrategy(),
-            new \WildPHP\Commands\ParameterStrategy()
+            new ParameterStrategy(),
+            new ParameterStrategy(),
+            new ParameterStrategy(),
+            new ParameterStrategy()
         ];
-        $command = new Command([$this, 'foo'], new \WildPHP\Commands\ParameterStrategy());
+        $command = new Command([$this, 'foo'], new ParameterStrategy());
 
         $command->setParameterStrategies($parameterStrategies);
-        $this->assertSame($parameterStrategies, $command->getParameterStrategies());
+        self::assertSame($parameterStrategies, $command->getParameterStrategies());
 
-        $this->expectException(\InvalidArgumentException::class);
-        $command->setParameterStrategies([new \WildPHP\Commands\Parameters\NumericParameter()]);
+        $this->expectException(InvalidArgumentException::class);
+        $command->setParameterStrategies([new NumericParameter()]);
     }
 }

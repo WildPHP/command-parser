@@ -31,8 +31,9 @@ class CommandParser
         foreach ($parameterStrategies as $parameterStrategy) {
             $result = $parameterStrategy->validateParameterArray($parameters);
 
-            if ($result)
+            if ($result) {
                 return $parameterStrategy;
+            }
         }
 
         throw new NoApplicableStrategiesException();
@@ -60,12 +61,18 @@ class CommandParser
         $command = substr($firstPart, strlen($prefix));
 
         // Remove empty elements and excessive spaces.
-        $parameters = array_values(array_map('trim', array_filter($messageParts, function ($parameter) {
-            return !preg_match('/^$|\s/', $parameter);
-        })));
+        $parameters = array_values(
+            array_map(
+                'trim',
+                array_filter(
+                    $messageParts,
+                    static function ($parameter) {
+                        return !preg_match('/^$|\s/', $parameter);
+                    }
+                )
+            )
+        );
 
-        $parsedCommand = new ParsedCommand($command, $parameters);
-
-        return $parsedCommand;
+        return new ParsedCommand($command, $parameters);
     }
 }

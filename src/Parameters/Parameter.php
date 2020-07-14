@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2018 The WildPHP Team
  *
@@ -7,6 +8,8 @@
  */
 
 namespace WildPHP\Commands\Parameters;
+
+use Closure;
 
 class Parameter implements ParameterInterface
 {
@@ -20,7 +23,7 @@ class Parameter implements ParameterInterface
      *
      * @param \Closure $validationClosure
      */
-    public function __construct(\Closure $validationClosure)
+    public function __construct(Closure $validationClosure)
     {
         $this->validationClosure = $validationClosure;
     }

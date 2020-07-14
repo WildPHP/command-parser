@@ -10,6 +10,7 @@
 namespace WildPHP\Commands;
 
 use ValidationClosures\Types;
+use WildPHP\Commands\Exceptions\CommandNotFoundException;
 use Yoshi2889\Collections\Collection;
 
 class CommandProcessor
@@ -17,7 +18,7 @@ class CommandProcessor
     /**
      * @var Collection
      */
-    protected $commandCollection = null;
+    protected $commandCollection;
 
     /**
      * CommandProcessor constructor.
@@ -63,7 +64,7 @@ class CommandProcessor
      * @param string $command
      *
      * @return Command
-     * @throws Exceptions\CommandNotFoundException
+     * @throws CommandNotFoundException
      */
     public function findCommand(string $command): Command
     {
@@ -110,7 +111,7 @@ class CommandProcessor
     /**
      * @param Collection $commandCollection
      */
-    public function setCommandCollection(Collection $commandCollection)
+    public function setCommandCollection(Collection $commandCollection): void
     {
         $this->commandCollection = $commandCollection;
     }
