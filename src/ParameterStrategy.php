@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2018 The WildPHP Team
  *
@@ -8,6 +9,7 @@
 
 namespace WildPHP\Commands;
 
+use InvalidArgumentException;
 use ValidationClosures\Types;
 use WildPHP\Commands\Exceptions\InvalidParameterCountException;
 use WildPHP\Commands\Exceptions\ValidationException;
@@ -15,6 +17,9 @@ use WildPHP\Commands\Parameters\ConvertibleParameterInterface;
 use WildPHP\Commands\Parameters\ParameterInterface;
 use Yoshi2889\Collections\Collection;
 
+/**
+ * @extends Collection<ParameterInterface>
+ */
 class ParameterStrategy extends Collection
 {
     /**
@@ -47,7 +52,7 @@ class ParameterStrategy extends Collection
         bool $concatLeftover = false
     ) {
         if ($maximumParameters >= 0 && $minimumParameters > $maximumParameters) {
-            throw new \InvalidArgumentException('Invalid parameter range (minimum cannot be larger than maximum)');
+            throw new InvalidArgumentException('Invalid parameter range (minimum cannot be larger than maximum)');
         }
 
         parent::__construct(Types::instanceof(ParameterInterface::class), $initialValues);
@@ -76,7 +81,7 @@ class ParameterStrategy extends Collection
     }
 
     /**
-     * @param array $args
+     * @param string[] $args
      *
      * @return bool
      * @throws \InvalidArgumentException
@@ -109,7 +114,7 @@ class ParameterStrategy extends Collection
     }
 
     /**
-     * @param array $args
+     * @param string[] $args
      *
      * @return bool
      */
@@ -133,19 +138,19 @@ class ParameterStrategy extends Collection
     public function convertParameter(string $parameterName, string $parameterValue)
     {
         if (!$this->offsetExists($parameterName)) {
-            throw new \InvalidArgumentException('Parameter name does not exist');
+            throw new InvalidArgumentException('Parameter name does not exist');
         }
 
-        if (!($this[$parameterName] instanceof ConvertibleParameterInterface)) {
-            return $parameterValue;
+        if ($this[$parameterName] instanceof ConvertibleParameterInterface) {
+            return $this[$parameterName]->convert($parameterValue);
         }
 
-        return $this[$parameterName]->convert($parameterValue);
+        return $parameterValue;
     }
 
     /**
-     * @param array $parameters
-     * @return array
+     * @param array<string, string> $parameters
+     * @return array<string, string|ConvertibleParameterInterface>
      */
     public function convertParameterArray(array $parameters): array
     {
@@ -157,8 +162,8 @@ class ParameterStrategy extends Collection
     }
 
     /**
-     * @param array $parameters
-     * @return array
+     * @param array<int|string, mixed> $parameters
+     * @return array<int|string, mixed>
      */
     public function remapNumericParameterIndexes(array $parameters): array
     {
@@ -180,17 +185,11 @@ class ParameterStrategy extends Collection
         return $remappedParameters;
     }
 
-    /**
-     * @return bool
-     */
     public function shouldConcatLeftover(): bool
     {
         return $this->concatLeftover;
     }
 
-    /**
-     * @param bool $concatLeftover
-     */
     public function setConcatLeftover(bool $concatLeftover): void
     {
         $this->concatLeftover = $concatLeftover;

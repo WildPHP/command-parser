@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2018 The WildPHP Team
  *
@@ -8,8 +9,9 @@
 
 namespace WildPHP\Commands\Exceptions;
 
+use Exception;
 
-class ParseException extends \Exception
+class ParseException extends Exception
 {
 
 }

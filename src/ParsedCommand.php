@@ -9,23 +9,24 @@
 
 namespace WildPHP\Commands;
 
-
 class ParsedCommand
 {
+
     /**
      * @var string
      */
     protected $command = '';
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $arguments = [];
 
     /**
      * ParsedCommand constructor.
-     * @param string $command
-     * @param array $arguments
+     *
+     * @param  string  $command
+     * @param  string[]  $arguments
      */
     public function __construct(string $command, array $arguments)
     {
@@ -33,24 +34,18 @@ class ParsedCommand
         $this->setArguments($arguments);
     }
 
-    /**
-     * @return string
-     */
     public function getCommand(): string
     {
         return $this->command;
     }
 
-    /**
-     * @param string $command
-     */
     public function setCommand(string $command): void
     {
         $this->command = $command;
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getArguments(): array
     {
@@ -58,13 +53,10 @@ class ParsedCommand
     }
 
     /**
-     * @param array $arguments
+     * @param  string[]  $arguments
      */
     public function setArguments(array $arguments): void
     {
         $this->arguments = $arguments;
     }
-
-
-
 }

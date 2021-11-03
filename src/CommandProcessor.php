@@ -14,22 +14,27 @@ use Yoshi2889\Collections\Collection;
 
 class CommandProcessor
 {
+
     /**
-     * @var Collection
+     * @var Collection<\WildPHP\Commands\Command>
      */
     protected $commandCollection = null;
 
     /**
      * CommandProcessor constructor.
-     * @param Command[] $initialValues
+     *
+     * @param  Command[]  $initialValues
      */
     public function __construct(array $initialValues = [])
     {
-        $this->setCommandCollection(new Collection(Types::instanceof(Command::class), $initialValues));
+        $this->setCommandCollection(
+            new Collection(Types::instanceof(Command::class), $initialValues)
+        );
     }
 
     /**
-     * @param ParsedCommand $parsedCommand
+     * @param  ParsedCommand  $parsedCommand
+     *
      * @return ProcessedCommand
      * @throws Exceptions\CommandNotFoundException
      * @throws Exceptions\InvalidParameterCountException
@@ -42,12 +47,6 @@ class CommandProcessor
         return self::processParsedCommand($parsedCommand, $commandObject);
     }
 
-    /**
-     * @param string $command
-     * @param Command $commandObject
-     *
-     * @return bool
-     */
     public function registerCommand(string $command, Command $commandObject): bool
     {
         if ($this->getCommandCollection()->offsetExists($command)) {
@@ -60,7 +59,7 @@ class CommandProcessor
     }
 
     /**
-     * @param string $command
+     * @param  string  $command
      *
      * @return Command
      * @throws Exceptions\CommandNotFoundException
@@ -69,26 +68,31 @@ class CommandProcessor
     {
         $dictionary = $this->getCommandCollection();
 
-        if (!$dictionary->offsetExists($command)) {
+        if (!$dictionary->offsetExists($command) || is_null($dictionary[$command])) {
             throw new Exceptions\CommandNotFoundException();
         }
 
-        /** @var Command $commandObject */
         return $dictionary[$command];
     }
 
     /**
-     * @param ParsedCommand $parsedCommand
-     * @param Command $command
+     * @param  ParsedCommand  $parsedCommand
+     * @param  Command  $command
+     *
      * @return ProcessedCommand
      * @throws Exceptions\InvalidParameterCountException
      * @throws Exceptions\NoApplicableStrategiesException
      * @throws Exceptions\ValidationException
      */
-    public static function processParsedCommand(ParsedCommand $parsedCommand, Command $command): ProcessedCommand
-    {
+    public static function processParsedCommand(
+        ParsedCommand $parsedCommand,
+        Command $command
+    ): ProcessedCommand {
         $parameters = $parsedCommand->getArguments();
-        $applicableStrategy = CommandParser::findApplicableStrategy($command, $parameters);
+        $applicableStrategy = CommandParser::findApplicableStrategy(
+            $command,
+            $parameters
+        );
 
         return new ProcessedCommand(
             $parsedCommand->getCommand(),
@@ -100,7 +104,7 @@ class CommandProcessor
     }
 
     /**
-     * @return Collection
+     * @return Collection<Command>
      */
     public function getCommandCollection(): Collection
     {
@@ -108,9 +112,9 @@ class CommandProcessor
     }
 
     /**
-     * @param Collection $commandCollection
+     * @param  Collection<Command>  $commandCollection
      */
-    public function setCommandCollection(Collection $commandCollection)
+    public function setCommandCollection(Collection $commandCollection): void
     {
         $this->commandCollection = $commandCollection;
     }

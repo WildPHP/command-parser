@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2018 The WildPHP Team
  *
@@ -18,7 +19,7 @@ class PredefinedStringParameter extends Parameter
     public function __construct(string $expected)
     {
         parent::__construct(function (string $value) use ($expected) {
-            return $value == $expected;
+            return $value === $expected;
         });
     }
 }

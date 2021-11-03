@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2018 The WildPHP Team
  *
@@ -8,8 +9,9 @@
 
 namespace WildPHP\Commands\Exceptions;
 
+use Exception;
 
-class ValidationException extends \Exception
+class ValidationException extends Exception
 {
 
 }

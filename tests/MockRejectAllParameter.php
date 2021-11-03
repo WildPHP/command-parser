@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2018 The WildPHP Team
  *
@@ -6,7 +7,7 @@
  * See the LICENSE file for more information.
  */
 
-namespace WildPHP\Tests;
+namespace WildPHP\Commands\Tests;
 
 use WildPHP\Commands\Parameters\Parameter;
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2018 The WildPHP Team
  *
@@ -6,12 +7,14 @@
  * See the LICENSE file for more information.
  */
 
+namespace WildPHP\Commands\Tests;
+
 use PHPUnit\Framework\TestCase;
 use WildPHP\Commands\Parameters\PredefinedStringParameter;
 
 class PredefinedStringParameterTest extends TestCase
 {
-    public function testPredefinedString()
+    public function testPredefinedString(): void
     {
         $predefinedStringParameter = new PredefinedStringParameter('test');
 

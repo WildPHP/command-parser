@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2018 The WildPHP Team
  *
@@ -6,16 +7,22 @@
  * See the LICENSE file for more information.
  */
 
+namespace WildPHP\Commands\Tests;
+
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use WildPHP\Commands\Exceptions\InvalidParameterCountException;
+use WildPHP\Commands\Exceptions\ValidationException;
+use WildPHP\Commands\Parameters\NumericParameter;
+use WildPHP\Commands\Parameters\StringParameter;
 use WildPHP\Commands\ParameterStrategy;
-use WildPHP\Tests\MockConvertibleParameter;
 
 class ParameterStrategyTest extends TestCase
 {
 
 
 
-    public function testValidateArgumentCount()
+    public function testValidateArgumentCount(): void
     {
         $parameterStrategy = new ParameterStrategy(0, 1);
 
@@ -24,7 +31,7 @@ class ParameterStrategyTest extends TestCase
         $this->assertFalse($parameterStrategy->validateParameterCount(['test', 'ing'])); // 2
     }
 
-    public function testImplodeLeftoverParameters()
+    public function testImplodeLeftoverParameters(): void
     {
         $parameterStrategy = new ParameterStrategy(0, 1, [], true);
         $parameters = ['test', 'ing', 'something', 'large'];
@@ -56,21 +63,21 @@ class ParameterStrategyTest extends TestCase
         );
     }
 
-    public function testValidateParameter()
+    public function testValidateParameter(): void
     {
         $parameterStrategy = new ParameterStrategy(1, 1, [
-            'test' => new \WildPHP\Commands\Parameters\NumericParameter()
+            'test' => new NumericParameter()
         ]);
 
         $this->assertTrue($parameterStrategy->validateParameter('test', 1));
         $this->assertFalse($parameterStrategy->validateParameter('test', 'ing'));
     }
 
-    public function testRemapNumericParameterIndexes()
+    public function testRemapNumericParameterIndexes(): void
     {
         $parameterStrategy = new ParameterStrategy(1, 1, [
-            'test' => new \WildPHP\Commands\Parameters\NumericParameter(),
-            'ing' => new \WildPHP\Commands\Parameters\NumericParameter()
+            'test' => new NumericParameter(),
+            'ing' => new NumericParameter()
         ]);
 
         $parameters = [1, 2];
@@ -82,7 +89,7 @@ class ParameterStrategyTest extends TestCase
         $this->assertEquals($expected, $parameterStrategy->remapNumericParameterIndexes($parameters));
     }
 
-    public function testConvertParameter()
+    public function testConvertParameter(): void
     {
         $parameterStrategy = new \WildPHP\Commands\ParameterStrategy(1, 4, [
             new MockConvertibleParameter(),
@@ -104,7 +111,7 @@ class ParameterStrategyTest extends TestCase
         );
 
         $parameterStrategy = new \WildPHP\Commands\ParameterStrategy(1, 1, [
-            'test' => new \WildPHP\Commands\Parameters\StringParameter()
+            'test' => new StringParameter()
         ]);
 
         $this->assertEquals(
@@ -117,16 +124,16 @@ class ParameterStrategyTest extends TestCase
             $parameterStrategy->convertParameter('test', 'test')
         );
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $parameterStrategy->convertParameter('testing', 'ing');
     }
 
-    public function testValidateParameterArray()
+    public function testValidateParameterArray(): void
     {
         $parameterStrategy = new ParameterStrategy(3, 3, [
-            'test' => new \WildPHP\Commands\Parameters\NumericParameter(),
-            'test2' => new \WildPHP\Commands\Parameters\NumericParameter(),
-            'test3' => new \WildPHP\Commands\Parameters\StringParameter()
+            'test' => new NumericParameter(),
+            'test2' => new NumericParameter(),
+            'test3' => new StringParameter()
         ]);
 
         $this->assertTrue($parameterStrategy->validateParameterArray([1, 2, 3]));
@@ -140,32 +147,32 @@ class ParameterStrategyTest extends TestCase
         $this->assertTrue($parameterStrategy->validateParameterArray([1, 2, 'test', 'ing']));
     }
 
-    public function testInvalidParameterCount()
+    public function testInvalidParameterCount(): void
     {
         $parameterStrategy = new ParameterStrategy(1, 1, [
             'test' => new MockConvertibleParameter()
         ]);
 
-        $this->expectException(\WildPHP\Commands\Exceptions\InvalidParameterCountException::class);
+        $this->expectException(InvalidParameterCountException::class);
         $parameterStrategy->validateParameterArray([1, 2, 3]);
     }
 
-    public function testMinMaxParameters()
+    public function testMinMaxParameters(): void
     {
         new ParameterStrategy(3, -1);
         new ParameterStrategy(0, 0);
         new ParameterStrategy(1, 2);
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new ParameterStrategy(3, 1);
     }
 
-    public function testInvalidParameterName()
+    public function testInvalidParameterName(): void
     {
         $parameterStrategy = new ParameterStrategy(1, 1, [
             'test' => new MockConvertibleParameter()
         ]);
 
-        $this->expectException(\WildPHP\Commands\Exceptions\ValidationException::class);
+        $this->expectException(ValidationException::class);
         $parameterStrategy->validateParameter('testing', 'test');
     }
 }

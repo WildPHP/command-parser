@@ -16,7 +16,7 @@ class CommandParser
 {
     /**
      * @param Command $commandObject
-     * @param array $parameters
+     * @param string[] $parameters
      *
      * @return ParameterStrategy
      * @throws Exceptions\InvalidParameterCountException
@@ -27,12 +27,12 @@ class CommandParser
     {
         $parameterStrategies = $commandObject->getParameterStrategies();
 
-        /** @var ParameterStrategy $parameterStrategy */
         foreach ($parameterStrategies as $parameterStrategy) {
             $result = $parameterStrategy->validateParameterArray($parameters);
 
-            if ($result)
+            if ($result) {
                 return $parameterStrategy;
+            }
         }
 
         throw new NoApplicableStrategiesException();
@@ -49,11 +49,11 @@ class CommandParser
         $messageParts = explode(' ', trim($string));
         $firstPart = array_shift($messageParts);
 
-        if (strlen($firstPart) == strlen($prefix)) {
+        if (strlen($firstPart) === strlen($prefix)) {
             throw new ParseException();
         }
 
-        if (substr($firstPart, 0, strlen($prefix)) != $prefix) {
+        if (strpos($firstPart, $prefix) !== 0) {
             throw new ParseException();
         }
 
@@ -64,8 +64,6 @@ class CommandParser
             return !preg_match('/^$|\s/', $parameter);
         })));
 
-        $parsedCommand = new ParsedCommand($command, $parameters);
-
-        return $parsedCommand;
+        return new ParsedCommand($command, $parameters);
     }
 }

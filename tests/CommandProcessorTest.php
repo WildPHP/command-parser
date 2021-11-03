@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2018 The WildPHP Team
  *
@@ -6,19 +7,27 @@
  * See the LICENSE file for more information.
  */
 
+namespace WildPHP\Commands\Tests;
+
 use PHPUnit\Framework\TestCase;
+use WildPHP\Commands\Command;
 use WildPHP\Commands\CommandProcessor;
+use WildPHP\Commands\Exceptions\CommandNotFoundException;
+use WildPHP\Commands\Parameters\NumericParameter;
+use WildPHP\Commands\ParameterStrategy;
+use WildPHP\Commands\ParsedCommand;
+use WildPHP\Commands\ProcessedCommand;
 
 class CommandProcessorTest extends TestCase
 {
     // mock function used to create commands.
-    public function foo() {
-
+    public function foo(): void
+    {
     }
 
-    public function testRegisterCommand()
+    public function testRegisterCommand(): void
     {
-        $command = new \WildPHP\Commands\Command([$this, 'foo'], new \WildPHP\Commands\ParameterStrategy());
+        $command = new Command([$this, 'foo'], new ParameterStrategy());
 
         $commandProcessor = new CommandProcessor();
         $this->assertTrue($commandProcessor->registerCommand('test', $command));
@@ -27,25 +36,25 @@ class CommandProcessorTest extends TestCase
         $this->assertSame($command, $commandProcessor->findCommand('test'));
     }
 
-    public function testInvalidFindCommand()
+    public function testInvalidFindCommand(): void
     {
-        $command = new \WildPHP\Commands\Command([$this, 'foo'], new \WildPHP\Commands\ParameterStrategy());
+        $command = new Command([$this, 'foo'], new ParameterStrategy());
 
         $commandProcessor = new CommandProcessor();
         $commandProcessor->registerCommand('test', $command);
 
-        $this->expectException(\WildPHP\Commands\Exceptions\CommandNotFoundException::class);
+        $this->expectException(CommandNotFoundException::class);
         $commandProcessor->findCommand('ing');
     }
 
-    public function testProcess()
+    public function testProcess(): void
     {
-        $parameterStrategy = new \WildPHP\Commands\ParameterStrategy(1, 1, [
-            new \WildPHP\Commands\Parameters\NumericParameter()
+        $parameterStrategy = new ParameterStrategy(1, 1, [
+            new NumericParameter()
         ]);
-        $command = new \WildPHP\Commands\Command([$this, 'foo'], [$parameterStrategy]);
+        $command = new Command([$this, 'foo'], [$parameterStrategy]);
 
-        $expectedProcessedCommand = new \WildPHP\Commands\ProcessedCommand(
+        $expected = new ProcessedCommand(
             'test',
             ['1'],
             $parameterStrategy,
@@ -56,8 +65,8 @@ class CommandProcessorTest extends TestCase
         $commandProcessor = new CommandProcessor();
         $commandProcessor->registerCommand('test', $command);
 
-        $parsedCommand = new \WildPHP\Commands\ParsedCommand('test', ['1']);
+        $parsedCommand = new ParsedCommand('test', ['1']);
 
-        $this->assertEquals($expectedProcessedCommand, $commandProcessor->process($parsedCommand));
+        $this->assertEquals($expected, $commandProcessor->process($parsedCommand));
     }
 }

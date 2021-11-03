@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2018 The WildPHP Team
  *
@@ -8,6 +9,7 @@
 
 namespace WildPHP\Commands;
 
+use InvalidArgumentException;
 use ValidationClosures\Types;
 use ValidationClosures\Utils;
 
@@ -27,9 +29,10 @@ class Command
      * Command constructor.
      *
      * @param callable $callback
-     * @param array|ParameterStrategy $parameterStrategies
+     * @param ParameterStrategy|ParameterStrategy[] $parameterStrategies
      */
-    public function __construct(callable $callback, $parameterStrategies) {
+    public function __construct(callable $callback, $parameterStrategies)
+    {
         if (!is_array($parameterStrategies)) {
             $parameterStrategies = [$parameterStrategies];
         }
@@ -38,24 +41,18 @@ class Command
         $this->setCallback($callback);
     }
 
-    /**
-     * @return callable
-     */
     public function getCallback(): callable
     {
         return $this->callback;
     }
 
-    /**
-     * @param callable $callback
-     */
-    public function setCallback(callable $callback)
+    public function setCallback(callable $callback): void
     {
         $this->callback = $callback;
     }
 
     /**
-     * @return array
+     * @return ParameterStrategy[]
      */
     public function getParameterStrategies(): array
     {
@@ -65,10 +62,10 @@ class Command
     /**
      * @param ParameterStrategy[] $parameterStrategies
      */
-    public function setParameterStrategies(array $parameterStrategies)
+    public function setParameterStrategies(array $parameterStrategies): void
     {
         if (!Utils::validateArray(Types::instanceof(ParameterStrategy::class), $parameterStrategies)) {
-            throw new \InvalidArgumentException('Invalid array passed');
+            throw new InvalidArgumentException('Invalid array passed');
         }
 
         $this->parameterStrategies = $parameterStrategies;
